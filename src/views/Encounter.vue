@@ -9,7 +9,6 @@
         </div>
     </section>
 
-    <!-- 🧭 Sub-navigation -->
     <nav class="sub-nav">
         <RouterLink
         v-for="tab in tabs"
@@ -120,7 +119,7 @@
             <td class="text-right align-numbers">{{ formatNumber(row.totalDamage / encounterDurationInSeconds, 0) }} DPS</td>
             <td class="text-right align-numbers">{{ formatNumber(row.totalHealing / encounterDurationInSeconds, 0) }} HPS</td>
             <td class="text-right align-numbers">{{ row.deaths }}</td>
-            <td class="text-right align-numbers">{{ row.damageTaken ?? 0 }}</td>
+            <td class="text-right align-numbers">{{ ((row.totalDamageTaken) / 1000000.000).toFixed(2) }}m </td>
             </tr>
         </tbody>
         </table>
