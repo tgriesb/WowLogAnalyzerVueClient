@@ -1,0 +1,111 @@
+/* Dark theme base styles */
+:root {
+  color-scheme: dark;
+  --bg-color: #0d1117;
+  --card-bg: #161b22;
+  --text-color: #c9d1d9;
+  --accent: #58a6ff;
+  --accent-hover: #79c0ff;
+  --border-color: #30363d;
+  --error: #ff6b6b;
+  font-family: 'Inter', system-ui, sans-serif;
+}
+
+body {
+  margin: 0;
+  background: var(--bg-color);
+  color: var(--text-color);
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+a:hover {
+  color: var(--accent-hover);
+}
+
+input,
+button {
+  font: inherit;
+  border: none;
+  outline: none;
+}
+
+input {
+  background: var(--card-bg);
+  color: var(--text-color);
+  padding: 0.75rem;
+  width: 100%;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  box-sizing: border-box;
+}
+
+button.button {
+  background: var(--accent);
+  color: black;
+  font-weight: 600;
+  padding: 0.75rem;
+  width: 100%;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s;
+}
+
+button:hover {
+  background: var(--accent-hover);
+  transform: scale(1.02);
+}
+
+.card {
+  background: var(--card-bg);
+  border: 1px solid var(--border-color);
+  border-radius: 12px;
+  padding: 2rem;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+}
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
+h1, h2, h3 {
+  margin: 0 0 1rem 0;
+}
+
+.text-center {
+  text-align: center !important;
+}
+.text-left {
+  text-align: left !important;
+}
+.text-right {
+  text-align: right !important;
+}
+
+.small-text {
+  font-size: 0.9rem;
+  color: #8b949e;
+}
+
+.align-numbers {
+  font-variant-numeric: tabular-nums;
+}
+
+.bg-death-knight { background-color: #C41E3A; }
+.bg-demon-hunter { background-color: #A330C9; }
+.bg-druid        { background-color: #FF7D0A; }
+.bg-evoker       { background-color: #33937F; }
+.bg-hunter       { background-color: #ABD473; }
+.bg-mage         { background-color: #40C7EB; }
+.bg-monk         { background-color: #00FF96; }
+.bg-paladin      { background-color: #F58CBA; }
+.bg-priest       { background-color: #FFFFFF; }
+.bg-rogue        { background-color: #FFF569; }
+.bg-shaman       { background-color: #0070DE; }
+.bg-warlock      { background-color: #8787ED; }
+.bg-warrior      { background-color: #C79C6E; }
