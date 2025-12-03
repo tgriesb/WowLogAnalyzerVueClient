@@ -25,18 +25,8 @@ export const useAuthStore = defineStore('auth', {
         })
 
         if (!res.ok) throw new Error('Invalid credentials')
-
         const data = await res.json()
-        let expireDate = new Date()
-        const expireMinutes = parseInt(data.expireMinutes)
-        expireDate.setMinutes(expireDate.getMinutes() + (expireMinutes - 1));
-        this.token = data.token
-        this.user = data.user
-        this.tokenExpiry = expireDate.toString()
-
-        localStorage.setItem('token', data.token)
-        localStorage.setItem('user', JSON.stringify(data.user))
-        localStorage.setItem('tokenExpiry', this.tokenExpiry)
+        await this.storeJwt(data.token, data.user, data.expireMinutes)
         return true
       } catch (err) {
         console.error(err)
@@ -44,11 +34,24 @@ export const useAuthStore = defineStore('auth', {
       }
     },
 
+    async storeJwt(token, user, expireMinutes) {
+      let expireDate = new Date()
+      expireDate.setMinutes(expireDate.getMinutes() + (parseInt(expireMinutes) - 1));
+      this.token = token
+      this.user = user
+      this.tokenExpiry = expireDate.toString()
+
+      localStorage.setItem('token', token)
+      localStorage.setItem('user', JSON.stringify(user))
+      localStorage.setItem('tokenExpiry', this.tokenExpiry)
+    },
+
     logout() {
       this.token = null
       this.user = null
       localStorage.removeItem('token')
       localStorage.removeItem('user')
+      localStorage.removeItem('tokenExpiry')
     },
   },
 })

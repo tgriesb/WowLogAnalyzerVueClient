@@ -159,10 +159,10 @@ const encounterDetails = computed(() => {
 })
 
 const tabs = [
-  { label: 'Overview', path: `/encounter/${encounterId}` },
-  { label: 'Damage', path: `/encounter/${encounterId}/damage` },
-  { label: 'Healing', path: `/encounter/${encounterId}/healing` },
-  { label: 'Deaths', path: `/encounter/${encounterId}/deaths` },
+  { label: 'Overview', path: `/log/${logId}/encounter/${encounterId}` },
+  { label: 'Damage', path: `/log/${logId}/encounter/${encounterId}/damage` },
+  { label: 'Healing', path: `/log/${logId}/encounter/${encounterId}/healing` },
+  { label: 'Deaths', path: `/log/${logId}/encounter/${encounterId}/deaths` },
 ]
 
 const characters = ref([])

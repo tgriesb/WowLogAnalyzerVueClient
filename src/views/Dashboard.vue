@@ -30,7 +30,6 @@
 </template>
 
 <script setup>
-import { reactive } from 'vue'
 import { useRouter } from 'vue-router'
 import { ref, onMounted } from 'vue'
 import { useApi } from '../composables/useApi'

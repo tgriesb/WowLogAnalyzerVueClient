@@ -1,23 +1,25 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import { useAuthStore } from '../store/auth'
-import LoginView from '../views/LoginView.vue'
-import DashboardView from '../views/DashboardView.vue'
+import Login from '../views/Login.vue'
+import Dashboard from '../views/Dashboard.vue'
 import LogUploader from '../views/LogUploader.vue'
 import Encounter from '../views/Encounter.vue'
 import Log from '../views/Log.vue'
+import Registration from '../views/Registration.vue'
 
 const routes = [
-  { path: '/login', name: 'login', component: LoginView },
-  { path: '/', name: 'dashboard', component: DashboardView, meta: { requiresAuth: true } },
-  { path: '/log-upload', name: 'log-upload', component: LogUploader, meta: { requiresAuth: true } },
-  { path: '/log/:logId', name: 'log', component: Log, meta: { requiresAuth: true }, children: 
+  { path: '/login', name: 'login', component: Login, meta: { requiresUnAuth: true, title: 'Login' }  },
+  { path: '/register', name: 'register', component: Registration, meta: { requiresUnAuth: true, title: 'Registration' }  },
+  { path: '/', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true, title: 'Dashboard' } },
+  { path: '/log-upload', name: 'log-upload', component: LogUploader, meta: { requiresAuth: true, title: 'Log Upload' } },
+  { path: '/log/:logId', name: 'log', component: Log, meta: { requiresAuth: true, title: 'Log' }, children: 
     [
       {
         path: 'encounter/:encounterId',
         name: 'encounter',
         component: Encounter,
         props: true,
-        meta: { requiresAuth: true }
+        meta: { requiresAuth: true, title: 'Encounter Overview' }
       }
     ]
    }
@@ -30,12 +32,21 @@ const router = createRouter({
 
 router.beforeEach((to) => {
   const auth = useAuthStore()
-  if (to.meta.requiresAuth && !auth.isAuthenticated) {
+  if (
+    to.meta.requiresAuth && 
+    !auth.isAuthenticated
+  ) {
     return { name: 'login' }
   }
 
-  if (to.name == 'login' && auth.isAuthenticated) {
+  if (auth.isAuthenticated && to.meta.requiresUnAuth) {
     return { name: 'dashboard'}
+  }
+
+  if (to.meta.title) {
+    document.title = to.meta.title + ' - Wow Log Analyzer';
+  } else {
+    document.title = 'Wow Log Analyzer';
   }
 })
 

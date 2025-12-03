@@ -31,13 +31,14 @@
 <script setup>
 import { RouterView, useRouter, RouterLink } from 'vue-router'
 import { useAuthStore } from './store/auth'
-import { ref } from 'vue'
+import { computed } from 'vue'
 
 const auth = useAuthStore()
 const router = useRouter()
-const user = auth.user
-const isAuthenticated = auth.isAuthenticated
 
+const isAuthenticated = computed(() => auth.isAuthenticated)
+const user = computed(() => auth.user)
+  
 
 const logout = async () => {
   await auth.logout()
