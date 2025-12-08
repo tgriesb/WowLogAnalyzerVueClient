@@ -133,7 +133,6 @@ Runs ESLint to check code quality and style.
 
 1. **Register**: Navigate to `/register` and create a new account
 2. **Login**: Use your credentials at `/login` to receive a JWT token
-3. **Token Storage**: The JWT token is stored in localStorage and automatically included in API requests
 
 ### Uploading Logs
 

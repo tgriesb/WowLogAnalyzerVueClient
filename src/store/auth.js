@@ -2,56 +2,57 @@ import { defineStore } from 'pinia'
 
 export const useAuthStore = defineStore('auth', {
   state: () => ({
-    token: localStorage.getItem('token') || null,
-    tokenExpiry: localStorage.getItem('tokenExpiry') || null,
-    user: JSON.parse(localStorage.getItem('user')) || null
+    user: null,
+    isLoaded: false 
   }),
 
   getters: {
-    isAuthenticated: (state) => {
-      return !!state.token &&
-          !!state.tokenExpiry &&
-          (new Date(state.tokenExpiry)) > (new Date())
-    }
+    isAuthenticated: (state) => !!state.user
   },
 
   actions: {
     async login(email, password) {
-      try {
-        const res = await fetch('/api/security/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email, password }),
-        })
+      const res = await fetch('/api/security/login', {
+        method: 'POST',
+        credentials: 'include',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
 
-        if (!res.ok) throw new Error('Invalid credentials')
-        const data = await res.json()
-        await this.storeJwt(data.token, data.user, data.expireMinutes)
-        return true
-      } catch (err) {
-        console.error(err)
-        return false
+      if (!res.ok) {
+        return false;
+      }
+
+      const meRes = await fetch('/api/security/me', {
+        credentials: 'include'
+      });
+
+      if (!meRes.ok) {
+        return false;
+      }
+
+      this.user = await meRes.json();
+      return true;
+    },
+    
+    async loadUser() {
+      try {
+        const res = await fetch('/api/security/me', { credentials: 'include' });
+        if (res.ok) {
+          this.user = await res.json();
+        }
+      } finally {
+        this.isLoaded = true; 
       }
     },
 
-    async storeJwt(token, user, expireMinutes) {
-      let expireDate = new Date()
-      expireDate.setMinutes(expireDate.getMinutes() + (parseInt(expireMinutes) - 1));
-      this.token = token
-      this.user = user
-      this.tokenExpiry = expireDate.toString()
+    async logout() {
+      await fetch('/api/security/logout', {
+        method: 'POST',
+        credentials: 'include'
+      });
 
-      localStorage.setItem('token', token)
-      localStorage.setItem('user', JSON.stringify(user))
-      localStorage.setItem('tokenExpiry', this.tokenExpiry)
-    },
-
-    logout() {
-      this.token = null
-      this.user = null
-      localStorage.removeItem('token')
-      localStorage.removeItem('user')
-      localStorage.removeItem('tokenExpiry')
-    },
-  },
-})
+      this.user = null;
+    }
+  }
+});

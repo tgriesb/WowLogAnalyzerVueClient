@@ -30,8 +30,14 @@ const router = createRouter({
   routes,
 })
 
-router.beforeEach((to) => {
+router.beforeEach(async (to) => {
   const auth = useAuthStore()
+
+  // Wait until /me finishes on page load
+  if (!auth.isLoaded) {
+    await auth.loadUser();
+  }
+  
   if (
     to.meta.requiresAuth && 
     !auth.isAuthenticated
