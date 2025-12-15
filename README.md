@@ -12,6 +12,24 @@ A modern Vue 3 web application for analyzing World of Warcraft combat logs. Uplo
 - **Real-time Statistics**: Damage, healing, and absorb metrics per player
 - **Responsive Design**: Mobile-friendly interface
 
+## Component Documentation
+
+The application is structured around several key views:
+
+### Views
+
+- **Dashboard.vue**: The main landing page. Displays a paginated table of uploaded logs.
+- **Log.vue**: The parent view for log details. Shows the list of encounters for a selected log.
+- **Encounter.vue**: The most complex view. Visualizes detailed statistics for a specific boss fight, including:
+  - DPS/HPS graphs using `vue-echarts`
+  - Group composition breakdown
+  - Damage and healing meters
+  - Detailed player tables
+
+### State Management
+
+- **auth.js**: Manages user authentication state (login, logout, user profile) using Pinia.
+
 ## Tech Stack
 
 - **Vue 3** - Progressive JavaScript framework with Composition API

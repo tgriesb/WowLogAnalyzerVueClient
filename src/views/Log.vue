@@ -59,34 +59,34 @@
 </template>
 
 <script setup>
-import { useRouter, useRoute } from 'vue-router'
-import { ref, onMounted, computed } from 'vue'
-import { useApi } from '../composables/useApi'
+import { useRouter, useRoute } from 'vue-router';
+import { ref, onMounted, computed } from 'vue';
+import { useApi } from '../composables/useApi';
 
-const { request } = useApi()
-const router = useRouter()
-const route = useRoute()
+const { request } = useApi();
+const router = useRouter();
+const route = useRoute();
 
-const encounters = ref([])
-const log = ref([])
-const loading = ref(true)
+const encounters = ref([]);
+const log = ref([]);
+const loading = ref(true);
 
-async function fetchLog() {
+const fetchLog = async () => {
   try {
-    const response = await request('/api/log/encounters/' + route.params.logId)
-    encounters.value = response.encounters || []
-    log.value = response.log || {}
-    loading.value = false
+    const response = await request('/api/log/encounters/' + route.params.logId);
+    encounters.value = response.encounters || [];
+    log.value = response.log || {};
+    loading.value = false;
   } catch (err) {
-    console.error('Failed to fetch logs', err)
+    console.error('Failed to fetch logs', err);
   }
-}
+};
 
-const encounterChosen = computed(() => route.name !== 'log')
+const encounterChosen = computed(() => route.name !== 'log');
 
 onMounted(() => {
-  fetchLog()
-})
+  fetchLog();
+});
 
 </script>
 

@@ -142,6 +142,15 @@ import {
 } from "echarts/components";
 import VChart, { THEME_KEY } from "vue-echarts";
 
+/**
+ * Encounter View Component
+ * 
+ * Displays detailed statistics for a specific boss encounter.
+ * Features include:
+ * - Character performance table (Damage, Healing, Deaths)
+ * - Interactive DPS/HPS graph over time
+ */
+
 const { request } = useApi()
 const route = useRoute()
 
