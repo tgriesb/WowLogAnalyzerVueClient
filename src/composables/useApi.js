@@ -29,6 +29,9 @@ export function useApi() {
         auth.logout()
         throw new Error("Unauthorized")
       }
+    } else if (response.status === 204) {
+      // No content
+      return;
     }
 
     if (!response.ok) {

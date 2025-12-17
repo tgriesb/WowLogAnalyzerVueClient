@@ -15,7 +15,7 @@
           <input v-model="password" type="password" required />
         </div>
 
-        <button class="button" type="submit">Sign In</button>
+        <button class="btn" type="submit">Sign In</button>
       </form>
 
       <p class="small-text text-center" style="margin-top: 1.5rem;">

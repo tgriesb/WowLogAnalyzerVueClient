@@ -21,6 +21,7 @@ a {
   color: var(--accent);
   text-decoration: none;
 }
+
 a:hover {
   color: var(--accent-hover);
 }
@@ -42,7 +43,7 @@ input {
   box-sizing: border-box;
 }
 
-button.button {
+.btn {
   background: var(--accent);
   color: black;
   font-weight: 600;
@@ -53,9 +54,44 @@ button.button {
   transition: background 0.2s, transform 0.1s;
 }
 
-button:hover {
+.btn:hover {
   background: var(--accent-hover);
   transform: scale(1.02);
+}
+
+.btn:disabled,
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none;
+}
+
+
+.btn-logout {
+  background-color: transparent;
+  border: 1px solid #3b82f6;
+  color: #3b82f6;
+  padding: 0.4rem 0.8rem;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: background-color 0.2s, color 0.2s;
+}
+
+.btn-logout:hover {
+  background-color: #3b82f6;
+  color: #fff;
+}
+
+button.btn-delete {
+  background-color: #a34f36;
+  border: 1px solid #a34f36;
+  color: white;
+}
+
+.btn-delete:hover {
+  background-color: #c7451e;
+  color: #fff;
 }
 
 .card {
@@ -73,16 +109,20 @@ button:hover {
   min-height: 100vh;
 }
 
-h1, h2, h3 {
+h1,
+h2,
+h3 {
   margin: 0 0 1rem 0;
 }
 
 .text-center {
   text-align: center !important;
 }
+
 .text-left {
   text-align: left !important;
 }
+
 .text-right {
   text-align: right !important;
 }
@@ -96,16 +136,54 @@ h1, h2, h3 {
   font-variant-numeric: tabular-nums;
 }
 
-.bg-death-knight { background-color: #C41E3A; }
-.bg-demon-hunter { background-color: #A330C9; }
-.bg-druid        { background-color: #FF7D0A; }
-.bg-evoker       { background-color: #33937F; }
-.bg-hunter       { background-color: #ABD473; }
-.bg-mage         { background-color: #40C7EB; }
-.bg-monk         { background-color: #00FF96; }
-.bg-paladin      { background-color: #F58CBA; }
-.bg-priest       { background-color: #FFFFFF; }
-.bg-rogue        { background-color: #FFF569; }
-.bg-shaman       { background-color: #0070DE; }
-.bg-warlock      { background-color: #8787ED; }
-.bg-warrior      { background-color: #C79C6E; }
+.bg-death-knight {
+  background-color: #C41E3A;
+}
+
+.bg-demon-hunter {
+  background-color: #A330C9;
+}
+
+.bg-druid {
+  background-color: #FF7D0A;
+}
+
+.bg-evoker {
+  background-color: #33937F;
+}
+
+.bg-hunter {
+  background-color: #ABD473;
+}
+
+.bg-mage {
+  background-color: #40C7EB;
+}
+
+.bg-monk {
+  background-color: #00FF96;
+}
+
+.bg-paladin {
+  background-color: #F58CBA;
+}
+
+.bg-priest {
+  background-color: #FFFFFF;
+}
+
+.bg-rogue {
+  background-color: #FFF569;
+}
+
+.bg-shaman {
+  background-color: #0070DE;
+}
+
+.bg-warlock {
+  background-color: #8787ED;
+}
+
+.bg-warrior {
+  background-color: #C79C6E;
+}

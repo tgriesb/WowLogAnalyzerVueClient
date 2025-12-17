@@ -12,7 +12,7 @@
         <div class="nav-right">
           <template v-if="isAuthenticated">
             <span class="user-email">{{ user.email }}</span>
-            <button @click="logout" class="logout-btn">Logout</button>
+            <button @click="logout" class="btn">Logout</button>
           </template>
           <template v-else>
             <RouterLink to="/login">Login</RouterLink>
@@ -47,11 +47,10 @@ const logout = async () => {
 </script>
 
 <style scoped>
-/* 🌙 Sticky Dark Navbar */
 .navbar {
-  position: sticky;         /* 👈 Keeps it at top while scrolling */
+  position: sticky;         
   top: 0;
-  z-index: 1000;            /* Stay above other content */
+  z-index: 1000;         
   background-color: #121212;
   border-bottom: 1px solid #2a2a2a;
   padding: 1rem;
@@ -71,7 +70,6 @@ const logout = async () => {
   gap: 1.5rem;
 }
 
-/* Navigation links */
 a {
   color: #ccc;
   text-decoration: none;
@@ -87,33 +85,16 @@ a.router-link-active {
   color: #3b82f6;
 }
 
-/* Right side user info */
 .user-email {
   color: #aaa;
   margin-right: 1rem;
   font-size: 0.9rem;
 }
 
-.logout-btn {
-  background-color: transparent;
-  border: 1px solid #3b82f6;
-  color: #3b82f6;
-  padding: 0.4rem 0.8rem;
-  border-radius: 5px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s, color 0.2s;
-}
-
-.logout-btn:hover {
-  background-color: #3b82f6;
-  color: #fff;
-}
-
 .main-content {
   background-color: #181818;
   min-height: 100vh;
-  padding: 5rem 2rem 2rem; /* 👈 Add top padding to avoid overlap with sticky header */
+  padding: 5rem 2rem 2rem; 
   color: #f1f1f1;
 }
 </style>

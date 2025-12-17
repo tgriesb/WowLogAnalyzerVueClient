@@ -26,7 +26,7 @@
         />
       </div>
 
-      <button class="button" type="submit" :disabled="isUploading">
+      <button class="btn" type="submit" :disabled="isUploading">
         {{ isUploading ? "Uploading..." : "Upload" }}
       </button>
     </form>
