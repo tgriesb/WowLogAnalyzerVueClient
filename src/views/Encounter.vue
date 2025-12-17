@@ -1,16 +1,19 @@
 <template>
-  <template v-if="encounterDetails">
-    <!-- 🧩 Encounter Summary Card -->
-    <section class="encounter-card">
-        <h2 class="encounter-name">{{ encounterDetails.name }}</h2>
-        <p class="raid">{{ encounterDetails.raid }}</p>
-        <div class="meta">
+  <div v-if="loading" class="loading-container">
+    <div class="spinner"></div>
+    <p>Loading encounter data...</p>
+  </div>
+  <template v-else-if="encounterDetails">
+    <section class="encounter-card" @click="goBackToEncounters()">
+      <h2 class="encounter-name">{{ encounterDetails.name }}</h2>
+      <p class="raid">{{ encounterDetails.raid }}</p>
+      <div class="meta">
         <span><strong>Date:</strong> {{ encounterDetails.startedAt }}</span>
-        </div>
+      </div>
     </section>
 
     <nav class="sub-nav">
-        <RouterLink
+      <RouterLink
         v-for="tab in tabs"
         :key="tab.path"
         :to="tab.path"
@@ -18,92 +21,88 @@
         :class="{ active: route.path === tab.path }"
         >
         {{ tab.label }}
-        </RouterLink>
+      </RouterLink>
     </nav>
 
     <section class="top-chart">
-        <VChart class="chart" :option="chartOptions" autoresize  />
+      <VChart class="chart" :option="chartOptions" autoresize  />
     </section>
 
     <section class="summary-section group-comp">
-        <h3>Group Composition</h3>
-        <div class="group-roles">
-            <div class="role">
-            <h4>Tanks</h4>
-            <div class="role-list">
-                <span v-for="t in tanks" :key="t.characterId" class="player">
-                <img :src="`/images/spec/${t.class.toLowerCase()}/${t.spec.toLowerCase()}.png`" alt="" class="class-icon" />
-                {{ t.character }}
-                </span>
-            </div>
-            </div>
+      <h3>Group Composition</h3>
+      <div class="group-roles">
+        <div class="role">
+          <h4>Tanks</h4>
+          <div class="role-list">
+              <span v-for="t in tanks" :key="t.characterId" class="player">
+              <img :src="`/images/spec/${t.class.toLowerCase()}/${t.spec.toLowerCase()}.png`" alt="" class="class-icon" />
+              {{ t.character }}
+              </span>
+          </div>
+          </div>
 
-            <div class="role">
-            <h4>DPS</h4>
-            <div class="role-list">
-                <span v-for="d in damageDealers" :key="d.characterId" class="player">
-                <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
-                {{ d.character }}
-                </span>
-            </div>
-            </div>
+          <div class="role">
+          <h4>DPS</h4>
+          <div class="role-list">
+            <span v-for="d in damageDealers" :key="d.characterId" class="player">
+            <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
+            {{ d.character }}
+            </span>
+          </div>
+        </div>
 
-            <div class="role">
-            <h4>Healers</h4>
-            <div class="role-list">
-                <span v-for="h in healers" :key="h.characterId" class="player">
-                <img :src="`/images/spec/${h.class.toLowerCase()}/${h.spec.toLowerCase()}.png`" alt="" class="class-icon" />
-                {{ h.character }}
-                </span>
-            </div>
+        <div class="role">
+          <h4>Healers</h4>
+          <div class="role-list">
+            <span v-for="h in healers" :key="h.characterId" class="player">
+              <img :src="`/images/spec/${h.class.toLowerCase()}/${h.spec.toLowerCase()}.png`" alt="" class="class-icon" />
+              {{ h.character }}
+            </span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="meters-row">
+      <div class="meter-card">
+        <h3>Damage Done by Source</h3>
+        <div class="meter-list">
+          <div v-for="d in charactersOrderedByDamage" :key="d.characterId" class="bar-row">
+            <div class="bar-label">
+              <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
+              <span>{{ d.character }}</span>
+                  </div>
+                  <div class="bar-container">
+                    <div :class="['bar', 'bg-' + d.class.toLowerCase().replace(/ /g, '-')]" :style="{ width: ((d.totalDamage / topDamageDealer.totalDamage) * 100)+ '%'}"></div>
+                    </div>
+                  <span class="bar-value align-numbers">{{ (d.totalDamage / 1000000.000).toFixed(2) }}m</span>
+                  <span class="bar-dps align-numbers">{{ formatNumber(d.totalDamage / encounterDurationInSeconds, 0) }} DPS</span>
+              </div>
             </div>
         </div>
-        </section>
-        <section class="meters-row">
-            <!-- Damage -->
-            <div class="meter-card">
-                <h3>Damage Done by Source</h3>
-                <div class="meter-list">
-                  <div v-for="d in charactersOrderedByDamage" :key="d.characterId" class="bar-row">
-                      <div class="bar-label">
-                        <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
-                        <span>{{ d.character }}</span>
-                      </div>
-                      <div class="bar-container">
-                        <div :class="['bar', 'bg-' + d.class.toLowerCase().replace(/ /g, '-')]" :style="{ width: ((d.totalDamage / topDamageDealer.totalDamage) * 100)+ '%'}"></div>
-                        </div>
-                      <span class="bar-value align-numbers">{{ (d.totalDamage / 1000000.000).toFixed(2) }}m</span>
-                      <span class="bar-dps align-numbers">{{ formatNumber(d.totalDamage / encounterDurationInSeconds, 0) }} DPS</span>
-                  </div>
-                </div>
-            </div>
 
-            <!-- Healing -->
-            <div class="meter-card">
-                <div class="meter-list">
-                 <h3>Healing Done by Source</h3>
-                  <div class="meter-list">
-                    <div v-for="d in charactersOrderedByHealingWithAbsorbs" :key="d.characterId" class="bar-row">
-                        <div class="bar-label">
-                          <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
-                          <span>{{ d.character }}</span>
-                        </div>
-                        <div class="bar-container">
-                          <div :class="['bar', 'bg-' + d.class.toLowerCase().replace(/ /g, '-')]" :style="{ width: (((d.totalHealing + d.totalAbsorb) / (topHealingWithAbsorbsDealer.totalHealing + topHealingWithAbsorbsDealer.totalAbsorb)) * 100)+ '%'}"></div>
-                          </div>
-                        <span class="bar-value align-numbers">{{ ((d.totalHealing + d.totalAbsorb) / 1000000.000).toFixed(2) }}m</span>
-                        <span class="bar-dps align-numbers">{{ formatNumber((d.totalHealing + d.totalAbsorb) / encounterDurationInSeconds, 0) }} HPS</span>
-                    </div>
-                  </div>
+        <div class="meter-card">
+          <div class="meter-list">
+            <h3>Healing Done by Source</h3>
+            <div class="meter-list">
+              <div v-for="d in charactersOrderedByHealingWithAbsorbs" :key="d.characterId" class="bar-row">
+                <div class="bar-label">
+                  <img :src="`/images/spec/${d.class.toLowerCase()}/${d.spec.toLowerCase()}.png`" alt="" class="class-icon" />
+                  <span>{{ d.character }}</span>
                 </div>
+                <div class="bar-container">
+                  <div :class="['bar', 'bg-' + d.class.toLowerCase().replace(/ /g, '-')]" :style="{ width: (((d.totalHealing + d.totalAbsorb) / (topHealingWithAbsorbsDealer.totalHealing + topHealingWithAbsorbsDealer.totalAbsorb)) * 100)+ '%'}"></div>
+                </div>
+                <span class="bar-value align-numbers">{{ ((d.totalHealing + d.totalAbsorb) / 1000000.000).toFixed(2) }}m</span>
+                <span class="bar-dps align-numbers">{{ formatNumber((d.totalHealing + d.totalAbsorb) / encounterDurationInSeconds, 0) }} HPS</span>
+              </div>
             </div>
-        </section>
-
-    <!-- 📊 Data Table -->
+          </div>
+        </div>
+    </section>
     <section class="data-table-section">
-        <table class="data-table">
+      <table class="data-table">
         <thead>
-            <tr>
+          <tr>
             <th>Player</th>
             <th>Spec</th>
             <th class="text-right">DPS</th>
@@ -122,13 +121,13 @@
             <td class="text-right align-numbers">{{ ((row.totalDamageTaken) / 1000000.000).toFixed(2) }}m </td>
             </tr>
         </tbody>
-        </table>
+      </table>
     </section>
   </template>
 </template>
 
 <script setup>
-import { useRoute } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import { ref, onMounted, computed, provide } from 'vue'
 import { useApi } from '../composables/useApi'
 import { use } from "echarts/core";
@@ -153,6 +152,7 @@ import VChart, { THEME_KEY } from "vue-echarts";
 
 const { request } = useApi()
 const route = useRoute()
+const router = useRouter()
 
 const props = defineProps({
     encounterId: String,
@@ -177,6 +177,7 @@ const tabs = [
 const characters = ref([])
 const totals = ref({})
 const statisticsPerInterval = ref([])
+const loading = ref(false)
 
 async function fetchEncounter() {
   try {
@@ -216,8 +217,6 @@ const tanks = computed(() => {
       tankChars.push(val)
     }
   })
-
-  console.log(tankChars)
 
   return tankChars
 })
@@ -285,6 +284,10 @@ const formatNumber = (number, decimals = 2) => {
   });
 }
 
+const goBackToEncounters = () => {
+  router.push({ name: 'log', params: { logId: logId } })
+}
+
 provide(THEME_KEY, "dark");
 
 use([
@@ -341,9 +344,13 @@ const chartOptions = computed(() => {
   }
 })
 
-onMounted(() => {
-  fetchEncounter()
-  fetchEncounterStatistics()
+onMounted(async () => {
+  loading.value = true
+  await Promise.all([
+    fetchEncounter(),
+    fetchEncounterStatistics()
+  ])
+  loading.value = false
 })
 
 </script>
@@ -549,5 +556,29 @@ onMounted(() => {
   flex: 1;
   min-width: 0;
   height: 400px;
+}
+
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 400px;
+  color: #888;
+  gap: 1rem;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #333;
+  border-top: 4px solid #3b82f6;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 </style>

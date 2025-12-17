@@ -29,6 +29,12 @@
       <button class="btn" type="submit" :disabled="isUploading">
         {{ isUploading ? "Uploading..." : "Upload" }}
       </button>
+
+      <!-- Indeterminate Loading Bar -->
+      <div v-if="isUploading" class="progress-container">
+        <div class="progress-bar indeterminate"></div>
+        <span class="progress-text">Processing Log (this may take a few minutes)...</span>
+      </div>
     </form>
 
     <p v-if="message">{{ message }}</p>
@@ -42,7 +48,7 @@ import { useRouter } from 'vue-router'
 const auth = useAuthStore()
 const router = useRouter()
 const selectedFile = ref(null)
-const logName = ref('') // 👈 new optional field
+const logName = ref('') 
 const message = ref('')
 const isUploading = ref(false)
 
@@ -143,5 +149,58 @@ button:disabled {
 p {
   margin-top: 1rem;
   text-align: center;
+}
+
+/* Progress Bar Styles */
+.progress-container {
+  width: 100%;
+  background-color: #333;
+  border-radius: 5px;
+  margin-top: 1rem;
+  height: 20px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #3b82f6;
+  width: 100%;
+}
+
+.progress-bar.indeterminate {
+  background-image: linear-gradient(
+    45deg,
+    rgba(255, 255, 255, 0.15) 25%,
+    transparent 25%,
+    transparent 50%,
+    rgba(255, 255, 255, 0.15) 50%,
+    rgba(255, 255, 255, 0.15) 75%,
+    transparent 75%,
+    transparent
+  );
+  background-size: 1rem 1rem;
+  animation: progress-indeterminate 1s linear infinite;
+}
+
+@keyframes progress-indeterminate {
+  from {
+    background-position: 0 0;
+  }
+  to {
+    background-position: 1rem 0;
+  }
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: bold;
+  text-shadow: 0 0 2px rgba(0,0,0,0.5);
+  white-space: nowrap;
 }
 </style>

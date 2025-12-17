@@ -8,26 +8,31 @@ import Log from '../views/Log.vue'
 import Registration from '../views/Registration.vue'
 
 const routes = [
-  { path: '/login', name: 'login', component: Login, meta: { requiresUnAuth: true, title: 'Login' }  },
-  { path: '/register', name: 'register', component: Registration, meta: { requiresUnAuth: true, title: 'Registration' }  },
+  { path: '/login', name: 'login', component: Login, meta: { requiresUnAuth: true, title: 'Login' } },
+  { path: '/register', name: 'register', component: Registration, meta: { requiresUnAuth: true, title: 'Registration' } },
   { path: '/', name: 'dashboard', component: Dashboard, meta: { requiresAuth: true, title: 'Dashboard' } },
   { path: '/log-upload', name: 'log-upload', component: LogUploader, meta: { requiresAuth: true, title: 'Log Upload' } },
-  { path: '/log/:logId', name: 'log', component: Log, meta: { requiresAuth: true, title: 'Log' }, children: 
-    [
-      {
-        path: 'encounter/:encounterId',
-        name: 'encounter',
-        component: Encounter,
-        props: true,
-        meta: { requiresAuth: true, title: 'Encounter Overview' }
-      }
-    ]
-   }
+  {
+    path: '/log/:logId', name: 'log', component: Log, meta: { requiresAuth: true, title: 'Log' }, children:
+      [
+        {
+          path: 'encounter/:encounterId',
+          name: 'encounter',
+          component: Encounter,
+          props: true,
+          meta: { requiresAuth: true, title: 'Encounter Overview' }
+        }
+      ]
+  }
 ]
 
 const router = createRouter({
   history: createWebHistory(),
   routes,
+  scrollBehavior(to, from, savedPosition) {
+    // Always scroll to the top of the page on navigation
+    return { top: 0, left: 0 };
+  }
 })
 
 router.beforeEach(async (to) => {
@@ -37,16 +42,16 @@ router.beforeEach(async (to) => {
   if (!auth.isLoaded) {
     await auth.loadUser();
   }
-  
+
   if (
-    to.meta.requiresAuth && 
+    to.meta.requiresAuth &&
     !auth.isAuthenticated
   ) {
     return { name: 'login' }
   }
 
   if (auth.isAuthenticated && to.meta.requiresUnAuth) {
-    return { name: 'dashboard'}
+    return { name: 'dashboard' }
   }
 
   if (to.meta.title) {

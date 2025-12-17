@@ -16,13 +16,10 @@
           <template v-if="!encounterChosen">
             <div v-if="loading" class="loading">Loading encounters...</div>
             <div v-else>
-              <div class="encounter-card">
+              <div class="encounter-card" @click="goToEncounter()">
                 <div class="encounter-info">
                   <h3 class="encounter-name">
-                    <RouterLink
-                      :to="`/log/${log.id}/encounters`"
-                      class="log-link"
-                    >Encounters</RouterLink>
+                    Encounters
                   </h3>
                 </div>
               </div>
@@ -30,19 +27,11 @@
                 v-for="encounter in encounters"
                 :key="encounter.id"
                 class="encounter-card"
+                @click="goToEncounter(encounter.id)"
               >
                 <div class="encounter-info">
                   <h3 class="encounter-name">
-                    <RouterLink
-                      :to="{ 
-                        name: 'encounter', 
-                        params: { 
-                          encounterId: encounter.id,
-                          logId: route.params.logId,
-                        }
-                      }"
-                      class="log-link"
-                    >{{ encounter.name }}</RouterLink>
+                    {{ encounter.name }}
                   </h3>
                 </div>
                 <div class="encounter-raid">
@@ -59,14 +48,15 @@
                 No encounters found for this log.
               </p>
             </div>
+            <button 
+              @click="deleteAndRedirect(log.id)" 
+              class="btn btn-delete" 
+              :disabled="isDeleting"
+            >
+              {{ isDeleting ? 'Deleting...' : 'Delete' }}
+            </button>
           </template>
-          <button 
-            @click="deleteAndRedirect(log.id)" 
-            class="btn btn-delete" 
-            :disabled="isDeleting"
-          >
-            {{ isDeleting ? 'Deleting...' : 'Delete' }}
-          </button>
+          
         </template>
       </div>
     </main>
@@ -119,6 +109,12 @@ const fetchLog = async () => {
 
 const encounterChosen = computed(() => route.name !== 'log');
 
+const goToEncounter = (encounterId = null) => {
+  // TODO: Implement all encounters logic
+  if (!encounterId) return;
+  router.push(`/log/${route.params.logId}/encounter/${encounterId}`);
+} 
+
 onMounted(() => {
   fetchLog();
 });
@@ -126,7 +122,6 @@ onMounted(() => {
 </script>
 
 <style>
-/* ... existing styles ... */
 .error-state {
   text-align: center;
   margin-top: 3rem;
@@ -181,6 +176,7 @@ onMounted(() => {
     margin-bottom: 1rem;
     transition: background 0.2s, transform 0.1s;
     min-height: 38px;
+    cursor: pointer;
   }
 
   .encounter-card:hover {
@@ -222,11 +218,11 @@ onMounted(() => {
     font-size: 0.85rem;
     color: #999;
   }
-    span.kill {
-        color: green;
-    }
+  span.kill {
+      color: green;
+  }
 
-    span.wipe {
-        color: red;
-    }
+  span.wipe {
+      color: red;
+  }
 </style>
