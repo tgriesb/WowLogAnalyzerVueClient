@@ -4,6 +4,10 @@ import Login from '../views/Login.vue'
 import Dashboard from '../views/Dashboard.vue'
 import LogUploader from '../views/LogUploader.vue'
 import Encounter from '../views/Encounter.vue'
+import EncounterOverview from '../views/EncounterOverview.vue'
+import EncounterDamage from '../views/EncounterDamage.vue'
+import EncounterHealing from '../views/EncounterHealing.vue'
+import EncounterDeaths from '../views/EncounterDeaths.vue'
 import Log from '../views/Log.vue'
 import Registration from '../views/Registration.vue'
 
@@ -17,10 +21,35 @@ const routes = [
       [
         {
           path: 'encounter/:encounterId',
-          name: 'encounter',
           component: Encounter,
           props: true,
-          meta: { requiresAuth: true, title: 'Encounter Overview' }
+          meta: { requiresAuth: true, title: 'Encounter' },
+          children: [
+            {
+              path: '',
+              name: 'encounter',
+              component: EncounterOverview,
+              meta: { title: 'Encounter Overview' }
+            },
+            {
+              path: 'damage',
+              name: 'encounter-damage',
+              component: EncounterDamage,
+              meta: { title: 'Damage Analysis' }
+            },
+            {
+              path: 'healing',
+              name: 'encounter-healing',
+              component: EncounterHealing,
+              meta: { title: 'Healing Analysis' }
+            },
+            {
+              path: 'deaths',
+              name: 'encounter-deaths',
+              component: EncounterDeaths,
+              meta: { title: 'Deaths' }
+            }
+          ]
         }
       ]
   }
