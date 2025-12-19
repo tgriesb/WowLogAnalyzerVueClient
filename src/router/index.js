@@ -50,6 +50,37 @@ const routes = [
               meta: { title: 'Deaths' }
             }
           ]
+        },
+        {
+          path: 'all',
+          component: () => import('../views/LogAllEncounters.vue'),
+          props: true,
+          children: [
+            {
+              path: '',
+              redirect: to => `/log/${to.params.logId}/all/overview`
+            },
+            {
+              path: 'overview',
+              name: 'log-all-overview',
+              component: () => import('../views/EncounterOverview.vue')
+            },
+            {
+              path: 'damage',
+              name: 'log-all-damage',
+              component: () => import('../views/EncounterDamage.vue')
+            },
+            {
+              path: 'healing',
+              name: 'log-all-healing',
+              component: () => import('../views/EncounterHealing.vue')
+            },
+            {
+              path: 'deaths',
+              name: 'log-all-deaths',
+              component: () => import('../views/EncounterDeaths.vue')
+            }
+          ]
         }
       ]
   }

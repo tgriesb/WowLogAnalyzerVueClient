@@ -16,12 +16,12 @@
           <template v-if="!encounterChosen">
             <div v-if="loading" class="loading">Loading encounters...</div>
             <div v-else>
-              <div class="encounter-card" @click="goToEncounter()">
-                <div class="encounter-info">
-                  <h3 class="encounter-name">
-                    Encounters
-                  </h3>
-                </div>
+              <div class="encounter-card" @click="goToAllEncounters()">
+                 <div class="encounter-info">
+                   <h3 class="encounter-name">
+                     Encounters
+                   </h3>
+                 </div>
               </div>
               <div
                 v-for="encounter in encounters"
@@ -113,6 +113,10 @@ const goToEncounter = (encounterId = null) => {
   // TODO: Implement all encounters logic
   if (!encounterId) return;
   router.push(`/log/${route.params.logId}/encounter/${encounterId}`);
+} 
+
+const goToAllEncounters = () => {
+    router.push(`/log/${route.params.logId}/all`);
 } 
 
 onMounted(() => {

@@ -18,8 +18,7 @@
                 :style="{ width: ((d.totalDamage / topDamageDealer.totalDamage) * 100) + '%' }"></div>
             </div>
             <span class="bar-value align-numbers">{{ (d.totalDamage / 1000000.000).toFixed(2) }}m</span>
-            <span class="bar-dps align-numbers">{{ formatNumber(d.totalDamage / encounterDurationInSeconds, 0)
-              }} DPS</span>
+            <span class="bar-dps align-numbers">{{ formatNumber(d.totalDamage / encounterDurationInSeconds, 0) }} DPS</span>
           </div>
         </div>
       </div>
